@@ -1,0 +1,23 @@
+defaults: ../model/gwma.yaml
+seed: 42
+stage: pretrain
+data:
+  train: data/gaussian/train/data.h5
+  valid: data/gaussian/valid/data.h5
+loss:
+  mse_weight: 1.0
+  envelope_weight: 0.0
+  spectral_weight: 0.0
+  spectral_epsilon: 1.0e-6
+training:
+  output_dir: results/pretrain_stronger_mask085_e50
+  device: auto
+  epochs: 50
+  batch_size: 4
+  gradient_accumulation_steps: 8
+  workers: 4
+  learning_rate: 1.0e-4
+  weight_decay: 0.05
+  mask_ratio: 0.85
+  sample_weighting: masked
+  amp: true

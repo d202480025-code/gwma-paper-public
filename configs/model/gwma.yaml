@@ -1,0 +1,20 @@
+model:
+  name: gwma
+  signal_length: 4096
+  frame_length: 64
+  hop_length: 32
+  embed_dim: 768
+  depth: 24
+  num_heads: 12
+  mlp_ratio: 4.0
+  dropout: 0.0
+  attention_dropout: 0.0
+  mask_ratio: 0.75
+  local_conv_kernel: 3
+  residual_conv_kernel: 7
+  learned_position_embedding: false
+  tied_decoder: false
+  embedding_type: conv
+  decoder_type: conv_transpose
+  mask_strategy: zero
+  use_checkpointing: true

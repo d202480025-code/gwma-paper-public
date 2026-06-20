@@ -1,0 +1,20 @@
+seed: 2042
+mode: pure_glitch
+output_root: data/pure_glitch
+sample_rate: 4096
+duration: 1.0
+merger_fraction: 0.5
+include_gaussian_noise: true
+snr: [0.0, 0.0]
+splits:
+  test: 1000
+source:
+  mass1: [10.0, 80.0]
+  mass2: [10.0, 80.0]
+  spin: [0.0, 0.9]
+  distance: 1000.0
+glitch:
+  kinds: [blip, sine_gaussian, ringdown, gaussian_pulse]
+  relations: [pre_merger, partial_overlap, full_overlap, post_merger, separated]
+  amplitudes: [1.0, 2.0, 3.0]
+

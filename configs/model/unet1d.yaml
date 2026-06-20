@@ -1,0 +1,6 @@
+model:
+  name: unet1d
+  in_channels: 1
+  base_channels: 64
+  depth: 4
+

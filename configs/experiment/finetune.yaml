@@ -1,0 +1,26 @@
+defaults: ../model/gwma.yaml
+seed: 42
+stage: finetune
+data:
+  train: data/gaussian/train/data.h5
+  valid: data/gaussian/valid/data.h5
+loss:
+  mse_weight: 1.0
+  envelope_weight: 0.0
+  spectral_weight: 0.0
+  spectral_epsilon: 1.0e-6
+  target_envelope_mse_alpha: 5.0
+  pure_noise_weight: 60.0
+training:
+  output_dir: results/finetune_stronger_pretrain
+  initial_checkpoint: results/pretrain_stronger_mask085_e50/best.pt
+  device: auto
+  epochs: 40
+  batch_size: 4
+  gradient_accumulation_steps: 8
+  workers: 4
+  learning_rate: 5.0e-5
+  weight_decay: 0.05
+  mask_ratio: 0.0
+  sample_weighting: none
+  amp: true

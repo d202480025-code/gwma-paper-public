@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the associated GWMA paper."
+title: "GWMA: Masked waveform reconstruction for transient-contaminated gravitational-wave data"
+type: software
+authors:
+  - family-names: Chen
+    given-names: Ming-Yi
+version: 0.1.0
+date-released: 2026-06-11
+license: MIT
+

@@ -1,0 +1,16 @@
+schema_version: 1
+training_sequence:
+  - pretrain.yaml
+  - finetune.yaml
+  - ablation_no_pretrain.yaml
+  - baseline_unet.yaml
+  - baseline_bilstm.yaml
+models:
+  gwma: finetune.yaml
+  gwma_no_pretrain: ablation_no_pretrain.yaml
+  unet1d: baseline_unet.yaml
+  bilstm: baseline_bilstm.yaml
+datasets:
+  gaussian: ../data/gaussian.yaml
+  glitch: ../data/glitch.yaml
+  pure_glitch: ../data/pure_glitch.yaml

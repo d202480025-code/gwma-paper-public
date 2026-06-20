@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.py[cod]
+
+/data/
+/results/
+/checkpoints/
+*.h5
+*.hdf5
+*.pt
+*.pth
+
+!results/.gitkeep

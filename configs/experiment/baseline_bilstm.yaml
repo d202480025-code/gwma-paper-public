@@ -1,0 +1,23 @@
+defaults: ../model/bilstm.yaml
+seed: 42
+stage: finetune
+data:
+  train: data/gaussian/train/data.h5
+  valid: data/gaussian/valid/data.h5
+loss:
+  mse_weight: 1.0
+  envelope_weight: 0.0
+  spectral_weight: 0.0
+  spectral_epsilon: 1.0e-6
+  target_envelope_mse_alpha: 5.0
+  pure_noise_weight: 60.0
+training:
+  output_dir: results/baseline_bilstm_hilbert
+  device: auto
+  epochs: 40
+  batch_size: 32
+  workers: 4
+  learning_rate: 1.0e-4
+  weight_decay: 0.05
+  sample_weighting: none
+  amp: false
