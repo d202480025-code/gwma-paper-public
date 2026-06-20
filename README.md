@@ -30,6 +30,7 @@ The main architecture parameters are in `configs/model/gwma.yaml`:
 - best pre-training mask ratio: 0.85
 - embedding / decoder: `conv` / `conv_transpose`
 - checkpointing: enabled
+- default inference veto: enabled
 
 Training parameters are in:
 
@@ -48,6 +49,23 @@ Reference best-GWMA metrics from the summary folder:
 | Gaussian mixed-SNR | mean overlap | 0.9719 |
 | Normal glitch mixed-SNR | mean overlap | 0.9365 |
 | Standard pure glitch safety | mean output/input ratio | 0.0056 |
+
+## Default Veto
+
+GWMA includes the conservative inference-time veto as part of the model
+configuration, not as an external plugin. It is enabled by default for
+`eval()` inference when `mask_ratio=0.0`, and it is disabled during training.
+
+Default thresholds in `configs/model/gwma.yaml`:
+
+- `veto_input_energy_floor: 100.0`
+- `veto_output_energy_floor: 0.0`
+- `veto_output_input_ratio_floor: 0.00375`
+- `veto_apply_during_training: false`
+
+With the best checkpoint, this setting leaves Gaussian unchanged, changes the
+normal glitch mean overlap by about `0.0013`, and vetoes the high-overlap
+pure-glitch stress set in the internal safety scan.
 
 ## Reproduce
 

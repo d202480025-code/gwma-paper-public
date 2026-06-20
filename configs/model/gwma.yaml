@@ -18,3 +18,8 @@ model:
   decoder_type: conv_transpose
   mask_strategy: zero
   use_checkpointing: true
+  veto_enabled: true
+  veto_input_energy_floor: 100.0
+  veto_output_energy_floor: 0.0
+  veto_output_input_ratio_floor: 0.00375
+  veto_apply_during_training: false

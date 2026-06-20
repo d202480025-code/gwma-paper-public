@@ -32,6 +32,11 @@ class GWMA(nn.Module):
         decoder_type: str = "overlap_add",
         mask_strategy: str = "mask_token",
         use_checkpointing: bool = False,
+        veto_enabled: bool = True,
+        veto_input_energy_floor: float = 100.0,
+        veto_output_energy_floor: float = 0.0,
+        veto_output_input_ratio_floor: float = 0.00375,
+        veto_apply_during_training: bool = False,
     ) -> None:
         super().__init__()
         if not 0.0 <= mask_ratio < 1.0:
@@ -53,6 +58,11 @@ class GWMA(nn.Module):
         self.decoder_type = decoder_type
         self.mask_strategy = mask_strategy
         self.use_checkpointing = use_checkpointing
+        self.veto_enabled = veto_enabled
+        self.veto_input_energy_floor = veto_input_energy_floor
+        self.veto_output_energy_floor = veto_output_energy_floor
+        self.veto_output_input_ratio_floor = veto_output_input_ratio_floor
+        self.veto_apply_during_training = veto_apply_during_training
 
         self.token_projection = (
             nn.Linear(frame_length, embed_dim, bias=False)
@@ -208,6 +218,17 @@ class GWMA(nn.Module):
             return self.decoder(hidden)
         return F.linear(hidden, self.token_projection.weight.transpose(0, 1))
 
+    def apply_veto(self, model_input: torch.Tensor, reconstruction: torch.Tensor) -> torch.Tensor:
+        input_energy = model_input.square().sum(dim=-1, keepdim=True)
+        output_energy = reconstruction.square().sum(dim=-1, keepdim=True)
+        ratio = output_energy / input_energy.clamp_min(torch.finfo(reconstruction.dtype).tiny)
+        veto = (
+            (input_energy < self.veto_input_energy_floor)
+            | (output_energy < self.veto_output_energy_floor)
+            | (ratio < self.veto_output_input_ratio_floor)
+        )
+        return reconstruction * (~veto).to(reconstruction.dtype)
+
     def forward(
         self,
         x: torch.Tensor,
@@ -231,4 +252,10 @@ class GWMA(nn.Module):
                 output_length=self.signal_length,
                 hop_length=self.hop_length,
             )
+        if (
+            self.veto_enabled
+            and ratio == 0.0
+            and (not self.training or self.veto_apply_during_training)
+        ):
+            reconstruction = self.apply_veto(x, reconstruction)
         return reconstruction, token_mask
